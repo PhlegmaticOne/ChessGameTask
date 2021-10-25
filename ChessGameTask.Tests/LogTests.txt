@@ -1,0 +1,9 @@
+White Pawn e2 moved to e4. Result is MovedToEmptySquare.
+Black Pawn c7 moved to c5. Result is MovedToEmptySquare.
+White Knight g1 moved to f3. Result is MovedToEmptySquare.
+Black Pawn d7 moved to d6. Result is MovedToEmptySquare.
+White Pawn c2 moved to c3. Result is MovedToEmptySquare.
+Black Knight g8 moved to f6. Result is MovedToEmptySquare.
+White Bishop f1 moved to e2. Result is MovedToEmptySquare.
+Black Knight f6 moved to e4. Result is HittedAnotherPiece. Hitted piece: Pawn: e4
+White Queen d1 moved to a4. Result is Check.
