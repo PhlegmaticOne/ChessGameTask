@@ -64,11 +64,27 @@ namespace ChessGame.Lib.GameLogic
             {
                 return PreMovementResultType.WrongMovement;
             }
-            var pieceBeginPosition = piece.CurrentPosition;
-            _chessBoard.SwapPieces(piece, newSquare.Piece);
-            var result = anotherPlayer.Pieces.All(p => p.GetPossibleNewSquares(_chessBoard).All(p => p.Piece is not King)) ?
-                         PreMovementResultType.PieceResolvingCheckmateFinded : PreMovementResultType.KingWillBeHitted;
-            _chessBoard.SwapPieces(_chessBoard[pieceBeginPosition.Horizontal, pieceBeginPosition.Vertical].Piece, piece);
+            PreMovementResultType result;
+            if (_chessBoard.ContainsEmptyPiece(newSquare))
+            {
+                var pieceBeginPosition = piece.CurrentPosition;
+                _chessBoard.SwapPieces(piece, newSquare.Piece);
+                result = anotherPlayer.Pieces.All(p => p.GetPossibleNewSquares(_chessBoard).All(p => p.Piece is not King)) ?
+                             PreMovementResultType.PieceResolvingCheckmateFinded : PreMovementResultType.KingWillBeHitted;
+                _chessBoard.SwapPieces(_chessBoard[pieceBeginPosition.Horizontal, pieceBeginPosition.Vertical].Piece, piece);
+            }
+            else
+            {
+                var copiedPieceToReplace = newSquare.Piece.Clone();
+                var newEmptyPiece = new EmptyPiece(copiedPieceToReplace);
+                anotherPlayer.Pieces.Remove(newSquare.Piece);
+                _chessBoard.SwapPieces(piece, newEmptyPiece);
+                result = anotherPlayer.Pieces.All(p => p.GetPossibleNewSquares(_chessBoard).All(p => p.Piece is not King)) ?
+                             PreMovementResultType.PieceResolvingCheckmateFinded : PreMovementResultType.KingWillBeHitted;
+                _chessBoard.SwapPieces(piece, newEmptyPiece);
+                _chessBoard[newEmptyPiece.CurrentPosition.Horizontal, newEmptyPiece.CurrentPosition.Vertical].Piece = copiedPieceToReplace;
+                anotherPlayer.Pieces.Add(copiedPieceToReplace);
+            }
             return result;
         }
         /// <summary>

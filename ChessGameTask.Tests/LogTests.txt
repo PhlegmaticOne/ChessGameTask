@@ -1,9 +1,51 @@
-White Pawn e2 moved to e4. Result is MovedToEmptySquare.
-Black Pawn c7 moved to c5. Result is MovedToEmptySquare.
-White Knight g1 moved to f3. Result is MovedToEmptySquare.
-Black Pawn d7 moved to d6. Result is MovedToEmptySquare.
-White Pawn c2 moved to c3. Result is MovedToEmptySquare.
+White Pawn d2 moved to d4. Result is MovedToEmptySquare.
+Black Pawn d7 moved to d5. Result is MovedToEmptySquare.
+White Bishop c1 moved to f4. Result is MovedToEmptySquare.
 Black Knight g8 moved to f6. Result is MovedToEmptySquare.
-White Bishop f1 moved to e2. Result is MovedToEmptySquare.
+White Knight g1 moved to f3. Result is MovedToEmptySquare.
+Black Pawn c7 moved to c5. Result is MovedToEmptySquare.
+White Pawn d4 moved to c5. Result is HittedAnotherPiece. Hitted piece: Pawn: c5
+Black Pawn e7 moved to e6. Result is MovedToEmptySquare.
+White Pawn e2 moved to e3. Result is MovedToEmptySquare.
+Black Bishop f8 moved to c5. Result is HittedAnotherPiece. Hitted piece: Pawn: c5
+White Pawn c2 moved to c4. Result is MovedToEmptySquare.
+Black King e8 moved to f8. Result is MovedToEmptySquare.
+White Knight b1 moved to c3. Result is MovedToEmptySquare.
+Black Knight b8 moved to c6. Result is MovedToEmptySquare.
+White Pawn h2 moved to h3. Result is MovedToEmptySquare.
+Black Queen d8 moved to a5. Result is MovedToEmptySquare.
+White Knight f3 moved to d2. Result is MovedToEmptySquare.
+Black Bishop c5 moved to b4. Result is MovedToEmptySquare.
+White Queen d1 moved to c2. Result is MovedToEmptySquare.
+Black Pawn d5 moved to d4. Result is MovedToEmptySquare.
+White Knight c3 moved to b1. Result is MovedToEmptySquare.
+Black King f8 moved to g8. Result is MovedToEmptySquare.
+White Pawn e3 moved to e4. Result is MovedToEmptySquare.
+Black Pawn g7 moved to g5. Result is MovedToEmptySquare.
+White Bishop f4 moved to h2. Result is MovedToEmptySquare.
+Black Pawn d4 moved to d3. Result is MovedToEmptySquare.
+White Queen c2 moved to c1. Result is MovedToEmptySquare.
 Black Knight f6 moved to e4. Result is HittedAnotherPiece. Hitted piece: Pawn: e4
-White Queen d1 moved to a4. Result is Check.
+White Pawn f2 moved to f3. Result is MovedToEmptySquare.
+Black Knight e4 moved to d2. Result is HittedAnotherPiece. Hitted piece: Knight: d2
+White Knight b1 moved to d2. Result is HittedAnotherPiece. Hitted piece: Knight: d2
+Black Knight c6 moved to d4. Result is MovedToEmptySquare.
+White King e1 moved to d1. Result is MovedToEmptySquare.
+Black Knight d4 moved to c2. Result is MovedToEmptySquare.
+White Knight d2 moved to b3. Result is MovedToEmptySquare.
+Black Queen a5 moved to f5. Result is MovedToEmptySquare.
+White Rook a1 moved to b1. Result is MovedToEmptySquare.
+Black Bishop c8 moved to d7. Result is MovedToEmptySquare.
+White Pawn h3 moved to h4. Result is MovedToEmptySquare.
+Black Bishop d7 moved to c6. Result is MovedToEmptySquare.
+White Knight b3 moved to d2. Result is MovedToEmptySquare.
+Black Pawn g5 moved to g4. Result is MovedToEmptySquare.
+White Pawn a2 moved to a3. Result is MovedToEmptySquare.
+Black Pawn g4 moved to f3. Result is HittedAnotherPiece. Hitted piece: Pawn: f3
+White Pawn g2 moved to g4. Result is MovedToEmptySquare.
+Black Pawn f3 moved to f2. Result is MovedToEmptySquare.
+White Pawn h4 moved to h5. Result is MovedToEmptySquare.
+Black Queen f5 moved to f3. Result is Check.
+White Knight d2 moved to f3. Result is HittedAnotherPiece. Hitted piece: Queen: f3
+Black Bishop c6 moved to f3. Result is Check. Hitted piece: Knight: f3
+White Bishop f1 moved to e2. Result is MovedToEmptySquare.

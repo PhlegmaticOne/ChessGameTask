@@ -9,6 +9,5 @@
         PieceResolvingCheckmateFinded,
         WrongMovement,
         CorrectMovement,
-        GameEnded
     }
 }

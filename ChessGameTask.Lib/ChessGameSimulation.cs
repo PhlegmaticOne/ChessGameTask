@@ -22,10 +22,6 @@ namespace ChessGame.Lib
         /// </summary>
         private MovementResultType _currentState;
         /// <summary>
-        /// Current pre movement result of a last pre moving cheching
-        /// </summary>
-        private PreMovementResultType _currentPreMovementResult;
-        /// <summary>
         /// Current chess board
         /// </summary>
         private readonly ChessBoard _chessBoard;
@@ -90,10 +86,11 @@ namespace ChessGame.Lib
         /// <returns>Movement result</returns>
         public MovementResultType Move(Piece piece, Square newSquare)
         {
-            if (GameCanContinue() == false) return _currentState;
+            if (CanContinue() == false) return _currentState;
+            var preMovecChecking = PreMoveChecking(piece, newSquare);
 
-            if(_currentPreMovementResult == PreMovementResultType.KingWillBeHitted ||
-               _currentPreMovementResult == PreMovementResultType.WrongMovement ||
+            if(preMovecChecking == PreMovementResultType.KingWillBeHitted ||
+               preMovecChecking == PreMovementResultType.WrongMovement ||
                _currentState == MovementResultType.WrongMovement)
             {
                 _currentState = MovementResultType.WrongMovement;
@@ -147,18 +144,10 @@ namespace ChessGame.Lib
         /// <summary>
         /// Checks state of posiible move
         /// </summary>
-        public PreMovementResultType PreMoveChecking(Piece piece, Square newSquare)
-        {
-            if (GameCanContinue() == false) return PreMovementResultType.GameEnded;
-            _currentPreMovementResult =  (_currentState == MovementResultType.Check) ?
-                                         _gameStateCheker.CanPieceSaveKing(piece, newSquare, AnotherPlayer) :
-                                         _gameStateCheker.CheckForOpeningKing(piece, newSquare, AnotherPlayer);
-            return _currentPreMovementResult;
-        }
-        /// <summary>
-        /// Checks state of posiible move
-        /// </summary>
-        public PreMovementResultType PreMoveChecking(Piece piece, char horizontal, int vertical) => PreMoveChecking(piece, _chessBoard[horizontal, vertical]);
+        private PreMovementResultType PreMoveChecking(Piece piece, Square newSquare) =>
+                                                     (_currentState == MovementResultType.Check) ?
+                                                    _gameStateCheker.CanPieceSaveKing(piece, newSquare, AnotherPlayer) :
+                                                    _gameStateCheker.CheckForOpeningKing(piece, newSquare, AnotherPlayer);
         /// <summary>
         /// Gets piece from the board that belong to a current player
         /// </summary>
@@ -178,9 +167,13 @@ namespace ChessGame.Lib
             return piece;
         }
         /// <summary>
+        /// Sets standoff if players want this
+        /// </summary>
+        public void SetStandoff() => _currentState = MovementResultType.Standoff;
+        /// <summary>
         /// Check if game is ended
         /// </summary>
-        public bool GameCanContinue() => _currentState != MovementResultType.Checkmate && _currentState != MovementResultType.Standoff;
+        public bool CanContinue() => _currentState != MovementResultType.Checkmate && _currentState != MovementResultType.Standoff;
         /// <summary>
         /// Swaps current player with an another player
         /// </summary>
