@@ -34,21 +34,24 @@ namespace ChessGame.Lib.GameLogic
         /// <summary>
         /// Checks if moving piece opens king with a similar to moving piece color
         /// </summary>
-        /// <param name="pieceToMove">Moving piece</param>
+        /// <param name="piece">Moving piece</param>
         /// <param name="newSquare">Square when piece want to go</param>
         /// <param name="anotherPlayer">Another player</param>
-        public PreMovementResultType CheckForOpeningKing(Piece pieceToMove, Square newSquare, Player anotherPlayer)
+        public PreMovementResultType CheckForOpeningKing(Piece piece, Square newSquare, Player anotherPlayer)
         {
-            var possibleMoves = pieceToMove.GetPossibleNewSquares(_chessBoard);
+            var possibleMoves = piece.GetPossibleNewSquares(_chessBoard);
             if (possibleMoves.Contains(newSquare) == false)
             {
                 return PreMovementResultType.WrongMovement;
             }
-            var pieceBeginPosition = pieceToMove.CurrentPosition;
-            _chessBoard.SwapPieces(pieceToMove, newSquare.Piece);
+            var pieceOnNewPosition = newSquare.Piece;
+            bool isBelongsToPlayer = pieceOnNewPosition is not EmptyPiece;
+            if(isBelongsToPlayer) anotherPlayer.Pieces.Remove(pieceOnNewPosition);
+            _chessBoard.SwapPieces(piece, pieceOnNewPosition);
             var result = anotherPlayer.Pieces.Any(p => p.GetPossibleNewSquares(_chessBoard).Any(p => p.Piece is King)) ?
-                                                    PreMovementResultType.KingWillBeHitted : PreMovementResultType.CorrectMovement;
-            _chessBoard.SwapPieces(_chessBoard[pieceBeginPosition.Horizontal, pieceBeginPosition.Vertical].Piece, pieceToMove);
+                                              PreMovementResultType.KingWillBeHitted : PreMovementResultType.CorrectMovement;
+            _chessBoard.SwapPieces(pieceOnNewPosition, piece);
+            if(isBelongsToPlayer) anotherPlayer.Pieces.Add(pieceOnNewPosition);
             return result;
         }
         /// <summary>
@@ -64,27 +67,15 @@ namespace ChessGame.Lib.GameLogic
             {
                 return PreMovementResultType.WrongMovement;
             }
-            PreMovementResultType result;
-            if (_chessBoard.ContainsEmptyPiece(newSquare))
-            {
-                var pieceBeginPosition = piece.CurrentPosition;
-                _chessBoard.SwapPieces(piece, newSquare.Piece);
-                result = anotherPlayer.Pieces.All(p => p.GetPossibleNewSquares(_chessBoard).All(p => p.Piece is not King)) ?
-                             PreMovementResultType.PieceResolvingCheckmateFinded : PreMovementResultType.KingWillBeHitted;
-                _chessBoard.SwapPieces(_chessBoard[pieceBeginPosition.Horizontal, pieceBeginPosition.Vertical].Piece, piece);
-            }
-            else
-            {
-                var copiedPieceToReplace = newSquare.Piece.Clone();
-                var newEmptyPiece = new EmptyPiece(copiedPieceToReplace);
-                anotherPlayer.Pieces.Remove(newSquare.Piece);
-                _chessBoard.SwapPieces(piece, newEmptyPiece);
-                result = anotherPlayer.Pieces.All(p => p.GetPossibleNewSquares(_chessBoard).All(p => p.Piece is not King)) ?
-                             PreMovementResultType.PieceResolvingCheckmateFinded : PreMovementResultType.KingWillBeHitted;
-                _chessBoard.SwapPieces(piece, newEmptyPiece);
-                _chessBoard[newEmptyPiece.CurrentPosition.Horizontal, newEmptyPiece.CurrentPosition.Vertical].Piece = copiedPieceToReplace;
-                anotherPlayer.Pieces.Add(copiedPieceToReplace);
-            }
+            var pieceOnNewPosition = newSquare.Piece;
+
+            bool isBelongsToPlayer = pieceOnNewPosition is not EmptyPiece;
+            if (isBelongsToPlayer) anotherPlayer.Pieces.Remove(pieceOnNewPosition);
+            _chessBoard.SwapPieces(piece, pieceOnNewPosition);
+            var result = anotherPlayer.Pieces.All(p => p.GetPossibleNewSquares(_chessBoard).All(p => p.Piece is not King)) ?
+                         PreMovementResultType.PieceResolvingCheckmateFinded : PreMovementResultType.KingWillBeHitted;
+            _chessBoard.SwapPieces(pieceOnNewPosition, piece);
+            if (isBelongsToPlayer) anotherPlayer.Pieces.Add(pieceOnNewPosition);
             return result;
         }
         /// <summary>
