@@ -15,7 +15,15 @@ namespace ChessGame.Lib.Figures
         /// </summary>
         /// <param name="startPosition">Start position of figure</param>
         /// <param name="color">Figure color</param>
-        public Piece(Position startPosition, Color color) => (CurrentPosition, Color) = (startPosition, color);
+        public Piece(Position startPosition, Color color)
+        {
+            if (Position.CanBeOnBoard(startPosition) == false)
+            {
+                throw new ArgumentException("Specified position can't belong to chess board", nameof(startPosition));
+            }
+            CurrentPosition = startPosition;
+            Color = color;
+        }
         /// <summary>
         /// Returns new chess figure which is equal to copying figure
         /// </summary>
@@ -40,11 +48,6 @@ namespace ChessGame.Lib.Figures
         /// </summary>
         /// <param name="position">New specified position</param>
         public void SetPosition(Position position) => CurrentPosition = position;
-        // <summary>
-        /// Sets new color to a piece
-        /// </summary>
-        /// <param name="position">New specified position</param>
-        public void SetColor(Color color) => Color = color;
         /// <summary>
         /// Clone this piece instance into a new piece which is equal to cloning piece
         /// </summary>
