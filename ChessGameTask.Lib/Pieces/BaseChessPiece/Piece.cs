@@ -40,6 +40,11 @@ namespace ChessGame.Lib.Figures
         /// </summary>
         /// <param name="position">New specified position</param>
         public void SetPosition(Position position) => CurrentPosition = position;
+        // <summary>
+        /// Sets new color to a piece
+        /// </summary>
+        /// <param name="position">New specified position</param>
+        public void SetColor(Color color) => Color = color;
         /// <summary>
         /// Clone this piece instance into a new piece which is equal to cloning piece
         /// </summary>

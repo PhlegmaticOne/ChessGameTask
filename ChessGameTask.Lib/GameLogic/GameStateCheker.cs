@@ -1,7 +1,6 @@
 ﻿using ChessGame.Lib.Board;
 using ChessGame.Lib.Figures;
 using ChessGame.Lib.Players;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace ChessGame.Lib.GameLogic
@@ -9,7 +8,7 @@ namespace ChessGame.Lib.GameLogic
     /// <summary>
     /// Represents instance that checks current state of a chess board
     /// </summary>
-    public class GameStateCheker
+    internal class GameStateCheker
     {
         /// <summary>
         /// Current chess board with pieces
@@ -18,7 +17,7 @@ namespace ChessGame.Lib.GameLogic
         /// <summary>
         /// Initializes new checker instance with a specialized chess board
         /// </summary>
-        public GameStateCheker(ChessBoard chessBoard) => _chessBoard = chessBoard;
+        internal GameStateCheker(ChessBoard chessBoard) => _chessBoard = chessBoard;
         /// <summary>
         /// Check if moved piece make a check to aby enemy piece
         /// </summary>
@@ -37,7 +36,7 @@ namespace ChessGame.Lib.GameLogic
         /// <param name="piece">Moving piece</param>
         /// <param name="newSquare">Square when piece want to go</param>
         /// <param name="anotherPlayer">Another player</param>
-        public PreMovementResultType CheckForOpeningKing(Piece piece, Square newSquare, Player anotherPlayer)
+        internal PreMovementResultType CheckForOpeningKing(Piece piece, Square newSquare, Player anotherPlayer)
         {
             var possibleMoves = piece.GetPossibleNewSquares(_chessBoard);
             if (possibleMoves.Contains(newSquare) == false)
@@ -60,7 +59,7 @@ namespace ChessGame.Lib.GameLogic
         /// <param name="piece">Moving piece</param>
         /// <param name="newSquare">Square when piece want to go</param>
         /// <param name="anotherPlayer">Another player</param>
-        public PreMovementResultType CanPieceSaveKing(Piece piece, Square newSquare, Player anotherPlayer)
+        internal PreMovementResultType CanPieceSaveKing(Piece piece, Square newSquare, Player anotherPlayer)
         {
             var possibleMoves = piece.GetPossibleNewSquares(_chessBoard);
             if (possibleMoves.Contains(newSquare) == false)
@@ -90,13 +89,15 @@ namespace ChessGame.Lib.GameLogic
                 var pieceBeginPosition = piece.CurrentPosition;
                 foreach (var move in piece.GetPossibleNewSquares(_chessBoard))
                 {
-                    _chessBoard.SwapPieces(piece, _chessBoard[move.BoardPosition.Horizontal, move.BoardPosition.Vertical].Piece);
-                    if(pieceThatMadeCheck.GetPossibleNewSquares(_chessBoard).All(p => p.Piece is not King || p.BoardPosition == pieceThatMadeCheck.CurrentPosition))
+                    var pieceOnNewPosition = _chessBoard[move.BoardPosition.Horizontal, move.BoardPosition.Vertical].Piece;
+                    _chessBoard.SwapPieces(piece, pieceOnNewPosition);
+                    if (move.BoardPosition == pieceThatMadeCheck.CurrentPosition ||
+                        pieceThatMadeCheck.GetPossibleNewSquares(_chessBoard).All(p => p.Piece is not King))
                     {
                         _chessBoard.SwapPieces(piece, _chessBoard[pieceBeginPosition.Horizontal, pieceBeginPosition.Vertical].Piece);
                         return PreMovementResultType.PieceResolvingCheckmateFinded;
                     }
-                    _chessBoard.SwapPieces(piece, _chessBoard[pieceBeginPosition.Horizontal, pieceBeginPosition.Vertical].Piece);
+                    _chessBoard.SwapPieces(piece, pieceOnNewPosition);
                 }
             }
             return PreMovementResultType.KingWillBeHitted;

@@ -84,70 +84,7 @@ namespace ChessGame.Lib
         /// Moves a piece to an specified square
         /// </summary>
         /// <returns>Movement result</returns>
-        public MovementResultType Move(Piece piece, Square newSquare)
-        {
-            if (CanContinue() == false) return _currentState;
-            var preMovecChecking = PreMoveChecking(piece, newSquare);
-
-            if(preMovecChecking == PreMovementResultType.KingWillBeHitted ||
-               preMovecChecking == PreMovementResultType.WrongMovement ||
-               _currentState == MovementResultType.WrongMovement)
-            {
-                _currentState = MovementResultType.WrongMovement;
-                return _currentState;
-            }
-
-            var movementResult = new Movement(piece, newSquare, _chessBoard).Move();
-            if(movementResult.MovementResultType == MovementResultType.PawnTransformed)
-            {
-                CurrentPlayer.Pieces[CurrentPlayer.Pieces.FindIndex(i => i.CurrentPosition == movementResult.MovedPiece.CurrentPosition)] = movementResult.HittedPiece;
-            }
-            _currentState = _gameStateCheker.UpdateAfterMovement(movementResult).MovementResultType;
-            if(_currentState == MovementResultType.Check)
-            {
-                if(_gameStateCheker.CanAnyPieceSaveKing(AnotherPlayer, movementResult.MovedPiece) == PreMovementResultType.KingWillBeHitted)
-                {
-                    _currentState = MovementResultType.Checkmate;
-                    Winner = CurrentPlayer;
-                }
-            }
-            switch (movementResult.MovementResultType)
-            {
-                case MovementResultType.MovedToEmptySquare:
-                {
-                    ++CurrentPlayer.EmptyMovesCount;
-                    break;
-                }
-                case MovementResultType.HittedAnotherPiece:
-                {
-                    CurrentPlayer.HittedPieces.Add(movementResult.HittedPiece);
-                    AnotherPlayer.Pieces.Remove(AnotherPlayer.Pieces.First(p => p.CurrentPosition == movementResult.HittedPiece.CurrentPosition));
-                    CurrentPlayer.EmptyMovesCount = 0;
-                    break;
-                }
-            }
-            if (CurrentPlayer.EmptyMovesCount > MAX_EMPTY_MOVES_TO_STANDOFF)
-            {
-                _currentState = MovementResultType.Standoff;
-            }
-            movementResult.UpdateState(_currentState);
-            _logger.Log(movementResult);
-            SwapPlayers();
-            CurrentChessBoard = _chessBoard.Clone();
-            return _currentState;
-        }
-        /// <summary>
-        /// Moves a piece to an specified square
-        /// </summary>
-        /// <returns>Movement result</returns>
         public MovementResultType Move(Piece piece, char horizontal, int vertical) => Move(piece, _chessBoard[horizontal, vertical]);
-        /// <summary>
-        /// Checks state of posiible move
-        /// </summary>
-        private PreMovementResultType PreMoveChecking(Piece piece, Square newSquare) =>
-                                                     (_currentState == MovementResultType.Check) ?
-                                                    _gameStateCheker.CanPieceSaveKing(piece, newSquare, AnotherPlayer) :
-                                                    _gameStateCheker.CheckForOpeningKing(piece, newSquare, AnotherPlayer);
         /// <summary>
         /// Gets piece from the board that belong to a current player
         /// </summary>
@@ -178,5 +115,66 @@ namespace ChessGame.Lib
         /// Swaps current player with an another player
         /// </summary>
         private void SwapPlayers() => (CurrentPlayer, AnotherPlayer) = (AnotherPlayer, CurrentPlayer);
+        /// <summary>
+        /// Checks state of posiible move
+        /// </summary>
+        private PreMovementResultType PreMoveChecking(Piece piece, Square newSquare) =>
+                                                     (_currentState == MovementResultType.Check) ?
+                                                    _gameStateCheker.CanPieceSaveKing(piece, newSquare, AnotherPlayer) :
+                                                    _gameStateCheker.CheckForOpeningKing(piece, newSquare, AnotherPlayer);
+        /// <summary>
+        /// Moves a piece to an specified square
+        /// </summary>
+        /// <returns>Movement result</returns>
+        private MovementResultType Move(Piece piece, Square newSquare)
+        {
+            if (CanContinue() == false) return _currentState;
+            var preMovecChecking = PreMoveChecking(piece, newSquare);
+            if (preMovecChecking == PreMovementResultType.KingWillBeHitted ||
+               preMovecChecking == PreMovementResultType.WrongMovement ||
+               _currentState == MovementResultType.WrongMovement)
+            {
+                _currentState = MovementResultType.WrongMovement;
+                return _currentState;
+            }
+            var movementResult = new Movement(piece, newSquare, _chessBoard).Move();
+            if (movementResult.MovementResultType == MovementResultType.PawnTransformed)
+            {
+                CurrentPlayer.Pieces[CurrentPlayer.Pieces.FindIndex(i => i.CurrentPosition == movementResult.MovedPiece.CurrentPosition)] = movementResult.HittedPiece;
+            }
+            _currentState = _gameStateCheker.UpdateAfterMovement(movementResult).MovementResultType;
+            if (_currentState == MovementResultType.Check)
+            {
+                if (_gameStateCheker.CanAnyPieceSaveKing(AnotherPlayer, movementResult.MovedPiece) == PreMovementResultType.KingWillBeHitted)
+                {
+                    _currentState = MovementResultType.Checkmate;
+                    Winner = CurrentPlayer;
+                }
+            }
+            switch (movementResult.MovementResultType)
+            {
+                case MovementResultType.MovedToEmptySquare:
+                    {
+                        ++CurrentPlayer.EmptyMovesCount;
+                        break;
+                    }
+                case MovementResultType.HittedAnotherPiece:
+                    {
+                        CurrentPlayer.HittedPieces.Add(movementResult.HittedPiece);
+                        AnotherPlayer.Pieces.Remove(AnotherPlayer.Pieces.First(p => p.CurrentPosition == movementResult.HittedPiece.CurrentPosition));
+                        CurrentPlayer.EmptyMovesCount = 0;
+                        break;
+                    }
+            }
+            if (CurrentPlayer.EmptyMovesCount > MAX_EMPTY_MOVES_TO_STANDOFF)
+            {
+                _currentState = MovementResultType.Standoff;
+            }
+            movementResult.UpdateState(_currentState);
+            _logger.Log(movementResult);
+            SwapPlayers();
+            CurrentChessBoard = _chessBoard.Clone();
+            return _currentState;
+        }
     }
 }

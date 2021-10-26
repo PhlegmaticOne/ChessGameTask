@@ -25,7 +25,7 @@ namespace ChessGame.Lib.Players
         /// <summary>
         /// Player's name
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; }
         /// <summary>
         /// List of pieces that player has hitted
         /// </summary>

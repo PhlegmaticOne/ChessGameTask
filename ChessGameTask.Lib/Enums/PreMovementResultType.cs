@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents result that piece movement can lead to
     /// </summary>
-    public enum PreMovementResultType
+    internal enum PreMovementResultType
     {
         KingWillBeHitted,
         PieceResolvingCheckmateFinded,

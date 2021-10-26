@@ -1,10 +1,5 @@
 ﻿using Xunit;
-using ChessGame.Lib.Board;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ChessGame.Lib.Figures;
 using ChessGame.Lib.Helpers;
 
@@ -22,7 +17,6 @@ namespace ChessGame.Lib.Board.Tests
         [Fact()]
         public void SwapPiecesTest()
         {
-            //Swap
             _chessBoard.SwapPieces(_chessBoard['a', 1].Piece, _chessBoard['h', 7].Piece);
 
             Assert.IsType<Rook>(_chessBoard['h', 7].Piece);
